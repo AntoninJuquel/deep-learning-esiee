@@ -1,57 +1,46 @@
-import gzip
 import numpy as np
 import matplotlib.pyplot as plt
+from keras.datasets import mnist
+from keras.models import Sequential
+from keras.layers.core import Dense, Activation
+from keras.utils import to_categorical
 from sklearn.metrics import confusion_matrix
 
-def load_data():
-    with gzip.open('data/train-images-idx3-ubyte.gz', 'rb') as f:
-        train_images = np.frombuffer(f.read(), np.uint8, offset=16).reshape(-1, 784)
-    with gzip.open('data/train-labels-idx1-ubyte.gz', 'rb') as f:
-        train_labels = np.frombuffer(f.read(), np.uint8, offset=8)
-    with gzip.open('data/t10k-images-idx3-ubyte.gz', 'rb') as f:
-        test_images = np.frombuffer(f.read(), np.uint8, offset=16).reshape(-1, 784)
-    with gzip.open('data/t10k-labels-idx1-ubyte.gz', 'rb') as f:
-        test_labels = np.frombuffer(f.read(), np.uint8, offset=8)
-    return train_images, train_labels, test_images, test_labels
+(x_train, y_train), (x_test, y_test) = mnist.load_data()
 
-train_images, train_labels, test_images, test_labels = load_data()
+x_train = x_train.reshape(60000, 784)
+x_test = x_test.reshape(10000, 784)
+x_train = x_train.astype('float32') / 255
+x_test = x_test.astype('float32') / 255
 
-class Perceptron:
-    def __init__(self, input_size, output_size):
-        self.weights = np.random.randn(input_size, output_size)
-    
-    def sigmoid(self, z):
-        return 1.0 / (1.0 + np.exp(-z))
-    
-    def feedforward(self, x):
-        z = np.dot(x, self.weights)
-        return self.sigmoid(z)
-    
-    def train(self, train_images, train_labels, epochs, batch_size, learning_rate):
-        errors = []
-        for i in range(epochs):
-            print("Epoch", i+1)
-            for j in range(0, len(train_images), batch_size):
-                x = train_images[j:j+batch_size]
-                y = np.zeros((batch_size, 10))
-                y[np.arange(batch_size), train_labels[j:j+batch_size]] = 1
-                y_pred = self.feedforward(x)
-                error = y_pred - y
-                d_weights = np.dot(x.T, error)
-                self.weights -= learning_rate * d_weights
-                errors.append(np.mean(np.abs(error)))
-        plt.plot(errors)
-        plt.xlabel("Batch iterations")
-        plt.ylabel("Error")
-        plt.show()
-    
-    def evaluate(self, test_images, test_labels):
-        y_pred = np.argmax(self.feedforward(test_images), axis=1)
-        accuracy = np.mean(y_pred == test_labels)
-        print("Accuracy:", accuracy)
-        cm = confusion_matrix(test_labels, y_pred)
-        print("Confusion matrix:\n", cm)
+y_train = to_categorical(y_train, 10)
+y_test = to_categorical(y_test, 10)
 
-perceptron = Perceptron(784, 10)
-perceptron.train(train_images, train_labels, epochs=30, batch_size=10, learning_rate=0.1)
-perceptron.evaluate(test_images, test_labels)
+model = Sequential()
+model.add(Dense(10, input_dim=784))
+model.add(Activation('softmax'))
+
+model.compile(loss='categorical_crossentropy', optimizer='sgd', metrics=['accuracy'])
+history = model.fit(x_train, y_train, validation_data=(x_test, y_test), epochs=50, batch_size=128, verbose=1)
+
+test_loss, test_acc = model.evaluate(x_test, y_test)
+print('Test accuracy:', test_acc)
+
+plt.plot(history.history['loss'])
+plt.plot(history.history['val_loss'])
+plt.title('Courbe d\'erreur')
+plt.ylabel('Erreur')
+plt.xlabel('Époque')
+plt.legend(['Entrainement', 'Test'], loc='upper right')
+plt.show()
+
+Y_pred = model.predict(x_test)
+y_pred = np.argmax(Y_pred, axis=1)
+cm = confusion_matrix(np.argmax(y_test, axis=1), y_pred)
+print('Matrice de confusion:')
+print(cm)
+plt.matshow(cm)
+plt.colorbar()
+plt.xlabel("Predicted Label")
+plt.ylabel("True Label")
+plt.show()

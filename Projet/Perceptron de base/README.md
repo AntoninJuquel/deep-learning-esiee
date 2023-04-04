@@ -1,3 +1,11 @@
+## Introduction
+
+À partir du livre Neural Networks and Deep Learning book de Michel Nielsen,
+- mettre en oeuvre un perceptron « de base » (une couche de poids) 
+- pour la reconnaissance de chiffres manuscrit à partir de MNIST dataset, en python et afficher les resultats obtenus
+- tracer la courbe d'erreur pendant l'entraînement, qui montre comment l'erreur du modèle diminue au fil des itérations de l'entraînement
+- afficher la matrice de confusion, qui montre combien de fois chaque classe a été prédite correctement ou incorrectement.
+
 ## Mise en oeuvre
 
 1. Extraction des données à partir des fichiers .gz en utilisant la bibliothèque gzip de Python
