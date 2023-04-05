@@ -2,7 +2,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 from keras.datasets import mnist
 from keras.models import Sequential
-from keras.layers.core import Dense, Activation
+from keras.layers import Dense, Activation
 from keras.utils import to_categorical
 from sklearn.metrics import confusion_matrix
 
@@ -16,9 +16,10 @@ x_test = x_test.astype('float32') / 255
 y_train = to_categorical(y_train, 10)
 y_test = to_categorical(y_test, 10)
 
-model = Sequential()
-model.add(Dense(10, input_dim=784))
-model.add(Activation('softmax'))
+model = Sequential([
+    Dense(10, input_dim=784),
+    Activation('softmax'),
+])
 
 model.compile(loss='categorical_crossentropy', optimizer='sgd', metrics=['accuracy'])
 history = model.fit(x_train, y_train, validation_data=(x_test, y_test), epochs=50, batch_size=128, verbose=1)

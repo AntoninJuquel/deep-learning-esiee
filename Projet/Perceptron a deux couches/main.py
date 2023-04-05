@@ -16,9 +16,10 @@ x_test = x_test.astype('float32') / 255
 y_train = to_categorical(y_train, 10)
 y_test = to_categorical(y_test, 10)
 
-model = Sequential()
-model.add(Dense(100, activation='sigmoid', input_shape=(784,)))
-model.add(Dense(10, activation='softmax'))
+model = Sequential([
+    Dense(100, activation='sigmoid', input_dim=784),
+    Dense(10, activation='softmax')
+])
 
 model.compile(loss='categorical_crossentropy', optimizer='sgd', metrics=['accuracy'])
 history = model.fit(x_train, y_train, validation_data=(x_test, y_test), epochs=50, batch_size=100, verbose=1)
