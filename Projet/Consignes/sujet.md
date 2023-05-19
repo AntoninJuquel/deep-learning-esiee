@@ -19,9 +19,7 @@ Il comprendra une annexe  de vos expérimentations sous forme d'un fichier Jupyt
 -  augmentation du nombre de couches de poids et résultats obtenus (limites du procédé), implémentation de réseaux avec couches de convolution. 
 -  Et tout ce que vous souhaiterez présenter
 
-Le projet sera sous forme d’un fichier PDF comprenant ces 4 à 5 pages de présentation de votre parcours dans le livre en ligne avec les expérimentations 
-que vous aurez faites, les performances observées (courbes des erreurs sur les ensembles d’apprentissage et de test en fonction du nombre d’époques), 
-matrice de confusion, etc. et pour finir : un paragraphe de conclusion.
+Le projet sera sous forme d’un fichier PDF comprenant ces 4 à 5 pages de présentation de votre parcours dans le livre en ligne avec les expérimentations que vous aurez faites, les performances observées (courbes des erreurs sur les ensembles d’apprentissage et de test en fonction du nombre d’époques), matrice de confusion, etc. et pour finir : un paragraphe de conclusion.
 
 Tout ça s’éclaircira très vite en avançant dans le livre. Just do it ( et enjoy !) 
 
